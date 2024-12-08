@@ -43,11 +43,11 @@ public class AmazonTest {
 
         amazonPage.searchBox.sendKeys(ConfigReader.getProperty("product") + Keys.ENTER);
         Assert.assertEquals(driver.getTitle(),"Amazon.com : "+ConfigReader.getProperty("product")+"");
-        logger.info(""+ConfigReader.getProperty("product")+" search was made.");
+        logger.info("{} search was made.", ConfigReader.getProperty("product"));
 
         List<WebElement> productList = amazonPage.products;
         List<String> productNamesAdded = new ArrayList<>();
-        logger.info(""+productList.size()+" products found in the list.");
+        logger.info("{} products found in the list.", productList.size());
 
         int productCount = 0;
 
@@ -55,9 +55,9 @@ public class AmazonTest {
         for (WebElement product : productList) {
             try {
                 // Check the discount tag
-                boolean isDiscounted = product.findElements(By.cssSelector(amazonPage.discount())).size() > 0;
+                boolean isDiscounted = !product.findElements(By.cssSelector(amazonPage.discount())).isEmpty();
                 // Check the "Add to Cart" button
-                boolean hasAddToCartButton = product.findElements(By.cssSelector(amazonPage.addToCartBtn())).size() > 0;
+                boolean hasAddToCartButton = !product.findElements(By.cssSelector(amazonPage.addToCartBtn())).isEmpty();
                 // If there is no discount and there is an "Add to Cart" button, add to cart
                 if (!isDiscounted && hasAddToCartButton) {
                     String productName = product.findElement(By.cssSelector(amazonPage.productName())).getText();
